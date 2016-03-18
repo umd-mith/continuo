@@ -1,4 +1,22 @@
-svg .selected {
-    color: red; 
-    fill: currentColor;
+.cnt-container {
+    svg {
+        .cnt-selected {
+            color: #0066ff; 
+            fill: currentColor;
+        }
+    }
+
+    .cnt-emabox {
+        display: none;
+        font-family: Helvetica, Arial, Sans-Serif;
+        font-weight: bold;
+        line-height: 2em;
+        background-color: #0066ff;
+        color: #fff;
+        padding: 5px;
+        font-size: 30px;
+        position: fixed;
+        top: 1em;
+        left: 1em;
+    }
 }

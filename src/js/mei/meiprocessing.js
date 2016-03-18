@@ -88,7 +88,7 @@ meiprocessing.getEventBeat = function() {
     }
 
     return beat;
-    
+
 }
 
 $.extend($.prototype, meiprocessing);

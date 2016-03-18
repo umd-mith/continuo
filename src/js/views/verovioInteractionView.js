@@ -5,6 +5,7 @@ import * as Backbone from 'backbone';
 import ns from '../utils/namespace';
 import Measures from '../data/coll-measures';
 import '../mei/meiprocessing';
+import Events from '../utils/backbone-events';
 
 // Note on Variable Prefixes
 // $varname is a jQuery object
@@ -29,30 +30,34 @@ class VerovioInteractionView extends Backbone.View {
         var ev_id = $mei_el.attr("id");  
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
-        if (!$mei_el.hasClass("selected")) {
-            $mei_el.addClass("selected");                      
+        if (!$mei_el.hasClass("cnt-selected")) {
+            $mei_el.addClass("cnt-selected");                      
 
             let XPmeasure = XPevent.xpath("ancestor::mei:measure[1]", ns);
             let measure_id = XPmeasure.xpath('@xml:id').val();
 
             let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
             let staff_id = XPstaff.xpath('@xml:id').val();
+            let measure_idx = XPmeasure.xpath("preceding::mei:measure", ns).length + 1;
 
             var measure = this.measures.get(measure_id);
             if (!measure) {
                 measure = this.measures.add({
                     "measure" : XPmeasure,
-                    "id" : measure_id
+                    "id" : measure_id,
+                    "index" : measure_idx
                 });
             }
 
             let staves = measure.get("staves");
             var staff = staves.get(staff_id);
+            var staff_idx = XPstaff.xpath("preceding-sibling::mei:staff", ns).length + 1;
 
             if (!staff) {
                 staff = staves.add({
                     "staff": XPstaff,
-                    "id" : staff_id  
+                    "id" : staff_id,
+                    "index" : staff_idx
                 });
             }
 
@@ -66,10 +71,11 @@ class VerovioInteractionView extends Backbone.View {
                 });
             }
 
-            console.log(this.measures);
+            let emaExpr = this.measures.generateOptimizedEMAExpr();
+            Events.trigger('component:emaBox', emaExpr);
         }
         else {
-            $mei_el.removeClass("selected");
+            $mei_el.removeClass("cnt-selected");
 
             let event_id = XPevent.xpath('@xml:id').val();
 
@@ -90,7 +96,6 @@ class VerovioInteractionView extends Backbone.View {
 
             if (storedBeat.length == 1) {
                 beats.remove(storedBeat);
-                console.log(beats);
             }
             else {
                 // not tested
@@ -108,7 +113,8 @@ class VerovioInteractionView extends Backbone.View {
                 this.measures.remove(measure_id);
             }
 
-            console.log(this.measures);
+            let emaExpr = this.measures.generateOptimizedEMAExpr();
+            Events.trigger('component:emaBox', emaExpr);
         }
     }
 

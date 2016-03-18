@@ -2,30 +2,44 @@ import $ from 'jquery';
 import * as Backbone from 'backbone';
 import VerovioInteractionView from './views/verovioInteractionView';
 import MEIdata from './data/model-MEIdata';
+import Events from './utils/backbone-events';
 
 class Continuo extends Backbone.View {
 
 	initialize(options) {
         this.mei = options.mei;
-        this.MEIdata = this.getMEIdata();
+        this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
     }
 
     getMEIdata(cb){
-    	$.get(this.mei, (data) => {
+    	$.get(this.mei, (data) => {            
     		this.MEIdata = new MEIdata(
     			{"doc": data, 
     			 "string": new XMLSerializer().serializeToString(data)
     			});
+            this.MEIdata.generate_ids();
     		if (cb) {
 	    		cb();
 	    	}
     	});
     }
+  
+    updateEmaBox(expr){
+        $(".cnt-emabox").show();
+        $(".cnt-emabox").text(expr);
+    }
 
     render(){
     	if (this.MEIdata) { 
-    		let container = $("<div></div>");
+    		let container = $("<div class='cnt-container'></div>");
     		this.$el.append(container);
+
+            // Create EMA floating box
+            let emaBox = $("<div class='cnt-emabox'></div>");
+            container.append(emaBox);
+
+            // Create score
+
     		// Sadly, importing Verovio crashes babelify, 
     		// so we assume it's globally available
     		// i.e. verovio must be defined.
