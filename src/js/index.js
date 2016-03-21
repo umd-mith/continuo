@@ -6,22 +6,22 @@ import Events from './utils/backbone-events';
 
 class Continuo extends Backbone.View {
 
-	initialize(options) {
+    initialize(options) {
         this.mei = options.mei;
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
     }
 
     getMEIdata(cb){
-    	$.get(this.mei, (data) => {            
-    		this.MEIdata = new MEIdata(
-    			{"doc": data, 
-    			 "string": new XMLSerializer().serializeToString(data)
-    			});
+        $.get(this.mei, (data) => {            
+            this.MEIdata = new MEIdata(
+                {"doc": data, 
+                 "string": new XMLSerializer().serializeToString(data)
+                });
             this.MEIdata.generate_ids();
-    		if (cb) {
-	    		cb();
-	    	}
-    	});
+            if (cb) {
+                cb();
+            }
+        });
     }
   
     updateEmaBox(expr){
@@ -30,9 +30,9 @@ class Continuo extends Backbone.View {
     }
 
     render(){
-    	if (this.MEIdata) { 
-    		let container = $("<div class='cnt-container'></div>");
-    		this.$el.append(container);
+        if (this.MEIdata) { 
+            let container = $("<div class='cnt-container'></div>");
+            this.$el.append(container);
 
             // Create EMA floating box
             let emaBox = $("<div class='cnt-emabox'></div>");
@@ -40,39 +40,39 @@ class Continuo extends Backbone.View {
 
             // Create score
 
-    		// Sadly, importing Verovio crashes babelify, 
-    		// so we assume it's globally available
-    		// i.e. verovio must be defined.
-			let vrvToolkit = new verovio.toolkit();
-			let scale = 50;
-			let options = JSON.stringify({
-			    pageWidth: this.$el.width() * 100 / scale,
-			    ignoreLayout: 1,
-			    adjustPageHeight: 1,
-			    border: 50,
-			    scale: scale
-			});
-			vrvToolkit.setOptions(options);
-			let mei = this.MEIdata.get("string");
-			vrvToolkit.loadData( mei + "\n", "" );
-			let pgs = vrvToolkit.getPageCount();
-			for (let page of Array.from(new Array(pgs), (x,i) => i)) {
-				let svg = vrvToolkit.renderPage(page+1);
+            // Sadly, importing Verovio crashes babelify, 
+            // so we assume it's globally available
+            // i.e. verovio must be defined.
+            let vrvToolkit = new verovio.toolkit();
+            let scale = 50;
+            let options = JSON.stringify({
+                pageWidth: this.$el.width() * 100 / scale,
+                ignoreLayout: 1,
+                adjustPageHeight: 1,
+                border: 50,
+                scale: scale
+            });
+            vrvToolkit.setOptions(options);
+            let mei = this.MEIdata.get("string");
+            vrvToolkit.loadData( mei + "\n", "" );
+            let pgs = vrvToolkit.getPageCount();
+            for (let page of Array.from(new Array(pgs), (x,i) => i)) {
+                let svg = vrvToolkit.renderPage(page+1);
 
-			    container.append(svg);
-			}
-			new VerovioInteractionView({"el": container, "model": this.MEIdata});
-    	}
-    	else {
-    		// bind(this) preserves the context
-    		this.getMEIdata(this.render.bind(this));
-    	}
+                container.append(svg);
+            }
+            new VerovioInteractionView({"el": container, "model": this.MEIdata});
+        }
+        else {
+            // bind(this) preserves the context
+            this.getMEIdata(this.render.bind(this));
+        }
     }
 
 }
 
 // Make main class available to pre-ES6 browser environments 
 if (window) {
-	window.Continuo = Continuo;
+    window.Continuo = Continuo;
 }
 export default Continuo;
