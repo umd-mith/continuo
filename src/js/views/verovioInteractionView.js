@@ -5,6 +5,7 @@ import * as Backbone from 'backbone';
 import ns from '../utils/namespace';
 import Measures from '../data/coll-measures';
 import '../mei/meiprocessing';
+import makeSVG from '../utils/svgprocessing';
 import Events from '../utils/backbone-events';
 
 // Note on Variable Prefixes
@@ -15,6 +16,9 @@ class VerovioInteractionView extends Backbone.View {
 
     events() {
         return {
+            'mousedown svg': 'startAreaSelect',
+            'mousemove': 'areaSelect',
+            'mouseup'  : 'stopAreaSelect',
             'click g.note' : 'toggleFullEvent',
             'click g.rest' : 'toggleFullEvent'
         }
@@ -116,6 +120,82 @@ class VerovioInteractionView extends Backbone.View {
             let emaExpr = this.measures.generateOptimizedEMAExpr();
             Events.trigger('component:emaBox', emaExpr);
         }
+    }
+
+    getSVGroot(evt) {
+        let vrv_page = evt.target;
+        if (vrv_page.tagName != 'svg'){
+            vrv_page = $(vrv_page).parents('svg').last().get(0);
+        }
+        return vrv_page;
+    }
+
+    getSVGloc(evt, svg){
+        let pt = svg.createSVGPoint();
+        pt.x = evt.clientX; pt.y = evt.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    startAreaSelect(e) {
+        e.preventDefault();
+
+        let vrv_page = this.getSVGroot(e);
+        let loc = this.getSVGloc(e, vrv_page);       
+
+        let rect_attrs = {
+            "rx"     : 6,
+            "ry"     : 6,
+            "class"  : "cnt-areaSel",
+            "x"      : loc.x,
+            "y"      : loc.y,
+            "width"  : 0,
+            "height" : 0
+        };
+        let rect = makeSVG("rect", rect_attrs);
+        vrv_page.appendChild(rect);
+    }
+
+    areaSelect(e) {
+        e.preventDefault(); 
+
+        let vrv_page = this.getSVGroot(e);
+        let s = $(vrv_page).find(".cnt-areaSel");
+        if(s.length > 0) {
+            let loc = this.getSVGloc(e, vrv_page);
+
+            let d = {
+                "x"      : parseInt(s.attr("x")),
+                "y"      : parseInt(s.attr("y")),
+                "width"  : parseInt(s.attr("width")),
+                "height" : parseInt(s.attr("height"))
+            },
+            move = {
+                "x" : loc.x - d.x,
+                "y" : loc.y - d.y
+            };
+
+            if( move.x < 1 || (move.x*2<d.width)) {
+                d.x = loc.x;
+                d.width -= move.x;
+            } else {
+                d.width = move.x;       
+            }
+
+            if( move.y < 1 || (move.y*2<d.height)) {
+                d.y = loc.y;
+                d.height -= move.y;
+            } else {
+                d.height = move.y;       
+            }
+
+            s.attr(d);
+        }
+    }
+
+    stopAreaSelect(e){
+        e.preventDefault();
+        let vrv_page = this.getSVGroot(e);
+        $(vrv_page).find(".cnt-areaSel").remove();
     }
 
 }
