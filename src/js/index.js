@@ -3,6 +3,10 @@ import * as Backbone from 'backbone';
 import VerovioInteractionView from './views/verovioInteractionView';
 import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
+import 'xmldom';
+
+// NOTES
+// jQuery is only used for HTML DOM operations. All XML DOM operations require xmldom.
 
 class Continuo extends Backbone.View {
 
@@ -12,16 +16,17 @@ class Continuo extends Backbone.View {
     }
 
     getMEIdata(cb){
-        $.get(this.mei, (data) => {            
+        $.get(this.mei, (data) => { 
+            let doc = new DOMParser().parseFromString(data, 'text/xml');
             this.MEIdata = new MEIdata(
-                {"doc": data, 
-                 "string": new XMLSerializer().serializeToString(data)
+                {"doc": doc, 
+                 "string": data
                 });
             this.MEIdata.generate_ids();
             if (cb) {
                 cb();
             }
-        });
+        }, 'text');
     }
   
     updateEmaBox(expr){
