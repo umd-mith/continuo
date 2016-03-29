@@ -1,8 +1,19 @@
+$selection_color: #0066ff;
+
 .cnt-container {
     svg {
+
         .cnt-selected {
-            color: #0066ff; 
+            color: $selection_color; 
             fill: currentColor;
+        }
+
+        rect.cnt-areaSel {
+            stroke          : gray;
+            stroke-dasharray: 4px;
+            stroke-opacity  : 0.5;
+            fill            : $selection_color;
+            fill-opacity    : .3;
         }
     }
 
@@ -11,7 +22,7 @@
         font-family: Helvetica, Arial, Sans-Serif;
         font-weight: bold;
         line-height: 2em;
-        background-color: #0066ff;
+        background-color: $selection_color;
         color: #fff;
         padding: 5px;
         font-size: 30px;
