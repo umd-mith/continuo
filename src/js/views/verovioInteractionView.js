@@ -5,7 +5,7 @@ import * as Backbone from 'backbone';
 import ns from '../utils/namespace';
 import Measures from '../data/coll-measures';
 import '../mei/meiprocessing';
-import makeSVG from '../utils/svgprocessing';
+import SVGProc from '../utils/svgprocessing';
 import Events from '../utils/backbone-events';
 
 // Note on Variable Prefixes
@@ -16,21 +16,24 @@ class VerovioInteractionView extends Backbone.View {
 
     events() {
         return {
-            'mousedown svg': 'startAreaSelect',
+            'mousedown svg': 'startSelect',
             'mousemove': 'areaSelect',
-            'mouseup'  : 'stopAreaSelect',
-            'click g.note' : 'toggleFullEvent',
-            'click g.rest' : 'toggleFullEvent'
+            'mouseup'  : 'stopSelect',
+            'mousedown g.cnt-selectable'  : 'startSelect'
         }
     }
 
     initialize() {
         this.$MEIdata = $(this.model.get("doc"));
         this.measures = new Measures();
+
+        // Flags for monitoring clicks and drags.
+        this.selecting = false;
+        this.dragging = false;
     }
 
-    toggleFullEvent(e) {
-        var $mei_el = $(e.currentTarget);
+    addMusEvent($mei_el) {
+        $mei_el = $mei_el.parent();
         var ev_id = $mei_el.attr("id");  
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
@@ -79,6 +82,16 @@ class VerovioInteractionView extends Backbone.View {
             Events.trigger('component:emaBox', emaExpr);
         }
         else {
+            //noop
+        }
+    }
+
+    removeMusEvent($mei_el){
+        $mei_el = $mei_el.parent();
+        var ev_id = $mei_el.attr("id");  
+        var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
+
+        if ($mei_el.hasClass("cnt-selected")) {
             $mei_el.removeClass("cnt-selected");
 
             let event_id = XPevent.xpath('@xml:id').val();
@@ -119,83 +132,144 @@ class VerovioInteractionView extends Backbone.View {
 
             let emaExpr = this.measures.generateOptimizedEMAExpr();
             Events.trigger('component:emaBox', emaExpr);
+        } else {
+            //noop
         }
     }
 
-    getSVGroot(evt) {
-        let vrv_page = evt.target;
-        if (vrv_page.tagName != 'svg'){
-            vrv_page = $(vrv_page).parents('svg').last().get(0);
-        }
-        return vrv_page;
-    }
-
-    getSVGloc(evt, svg){
-        let pt = svg.createSVGPoint();
-        pt.x = evt.clientX; pt.y = evt.clientY;
-        return pt.matrixTransform(svg.getScreenCTM().inverse());
-    }
-
-    startAreaSelect(e) {
+    startSelect(e) {
         e.preventDefault();
+        this.selecting = true;
 
-        let vrv_page = this.getSVGroot(e);
-        let loc = this.getSVGloc(e, vrv_page);       
 
-        let rect_attrs = {
-            "rx"     : 6,
-            "ry"     : 6,
-            "class"  : "cnt-areaSel",
-            "x"      : loc.x,
-            "y"      : loc.y,
-            "width"  : 0,
-            "height" : 0
-        };
-        let rect = makeSVG("rect", rect_attrs);
-        vrv_page.appendChild(rect);
+        let $ct = $(e.currentTarget);
+        if ($ct.is("g.cnt-selectable")){
+            // remove on Ctrl or ⌘.
+            if (e.ctrlKey || e.metaKey) {
+                this.removeMusEvent($ct);
+            }
+            else {
+                this.addMusEvent($ct);
+            }
+        }
+
     }
 
     areaSelect(e) {
         e.preventDefault(); 
+        if (this.selecting) {
+            this.dragging = true;
 
-        let vrv_page = this.getSVGroot(e);
-        let s = $(vrv_page).find(".cnt-areaSel");
-        if(s.length > 0) {
-            let loc = this.getSVGloc(e, vrv_page);
+            let vrv_page = SVGProc.getSVGRoot(e.target);
+            let s = $(vrv_page).find(".cnt-areaSel");
+            let loc = SVGProc.getSVGCoordinates({"x": e.clientX, "y" : e.clientY}, vrv_page);
+            if(s.length > 0) {
 
-            let d = {
-                "x"      : parseInt(s.attr("x")),
-                "y"      : parseInt(s.attr("y")),
-                "width"  : parseInt(s.attr("width")),
-                "height" : parseInt(s.attr("height"))
-            },
-            move = {
-                "x" : loc.x - d.x,
-                "y" : loc.y - d.y
-            };
+                let d = {
+                    "x"      : parseInt(s.attr("x")),
+                    "y"      : parseInt(s.attr("y")),
+                    "width"  : parseInt(s.attr("width")),
+                    "height" : parseInt(s.attr("height"))
+                },
+                move = {
+                    "x" : loc.x - d.x,
+                    "y" : loc.y - d.y
+                };
 
-            if( move.x < 1 || (move.x*2<d.width)) {
-                d.x = loc.x;
-                d.width -= move.x;
-            } else {
-                d.width = move.x;       
+                if( move.x < 1 || (move.x*2<d.width)) {
+                    d.x = loc.x;
+                    d.width -= move.x;
+                } else {
+                    d.width = move.x;       
+                }
+
+                if( move.y < 1 || (move.y*2<d.height)) {
+                    d.y = loc.y;
+                    d.height -= move.y;
+                } else {
+                    d.height = move.y;       
+                }
+
+                s.attr(d);
+
             }
-
-            if( move.y < 1 || (move.y*2<d.height)) {
-                d.y = loc.y;
-                d.height -= move.y;
-            } else {
-                d.height = move.y;       
+            else {
+                let rect_attrs = {
+                    "rx"     : 6,
+                    "ry"     : 6,
+                    "class"  : "cnt-areaSel",
+                    "x"      : loc.x,
+                    "y"      : loc.y,
+                    "width"  : 0,
+                    "height" : 0
+                };
+                let rect = SVGProc.makeSVGEl("rect", rect_attrs);
+                vrv_page.appendChild(rect);
             }
-
-            s.attr(d);
         }
     }
 
-    stopAreaSelect(e){
+    stopSelect(e){
         e.preventDefault();
-        let vrv_page = this.getSVGroot(e);
-        $(vrv_page).find(".cnt-areaSel").remove();
+
+        if (this.dragging) {
+            let vrv_page = SVGProc.getSVGRoot(e.target);
+            // Find selectable elements intersecting the selection rectangle
+            let s = $(vrv_page).find(".cnt-areaSel");
+            let d = {
+                "x": parseInt(s.attr("x")),
+                "y": parseInt(s.attr("y")),
+                "width": parseInt(s.attr("width")),
+                "height": parseInt(s.attr("height")),
+            }
+            d.right = d.x+d.width;
+            d.bottom = d.y+d.height;
+
+            $(vrv_page).find("g.cnt-selectable").each((i, ev) => {
+                let bcr = ev.getBoundingClientRect();
+                let ev_rect = {}
+
+                // We need to transform this according the hosting SVG
+                let pt_tl = SVGProc.getSVGCoordinates({
+                    "x": bcr.left + window.scrollX,
+                    "y": bcr.top + window.scrollY
+                }, vrv_page);
+                ev_rect.left = pt_tl.x;
+                ev_rect.top = pt_tl.y;
+
+                let pt_br = SVGProc.getSVGCoordinates({
+                    "x": bcr.right,
+                    "y": bcr.bottom
+                }, vrv_page);
+                ev_rect.right = pt_br.x;
+                ev_rect.bottom = pt_br.y;
+
+                if (
+                    (ev_rect.left >= d.x && ev_rect.left <= d.right &&
+                    ev_rect.top >= d.y && ev_rect.top <= d.bottom) 
+                    ||
+                    (ev_rect.right >= d.x && ev_rect.right <= d.right &&
+                    ev_rect.bottom >= d.y && ev_rect.bottom <= d.bottom)
+                ) {
+                    // remove on Ctrl or ⌘.
+                    if (e.ctrlKey || e.metaKey) {
+                        this.removeMusEvent($(ev));
+                    }
+                    else {
+                        this.addMusEvent($(ev));
+                    }
+                }
+                
+            });
+
+            // Remove selection rectangle
+            s.remove();
+        }      
+
+        // Reset mouse flags.
+        this.selecting = false;
+        this.dragging = false;
+
     }
 
 }
