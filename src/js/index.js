@@ -3,6 +3,7 @@ import * as Backbone from 'backbone';
 import VerovioInteractionView from './views/verovioInteractionView';
 import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
+import extend_vrv from './utils/verovio-ext';
 import 'xmldom';
 
 // NOTES
@@ -64,7 +65,9 @@ class Continuo extends Backbone.View {
             for (let page of Array.from(new Array(pgs), (x,i) => i)) {
                 let svg = vrvToolkit.renderPage(page+1);
 
-                container.append(svg);
+                let ext_svg = extend_vrv(svg);
+
+                container.append(ext_svg);
             }
             new VerovioInteractionView({"el": container, "model": this.MEIdata});
         }
