@@ -227,9 +227,9 @@ class VerovioInteractionView extends Backbone.View {
 
             $(vrv_page).find("g.cnt-selectable").each((i, ev) => {
                 let bcr = ev.getBoundingClientRect();
-                let ev_rect = {}
+                let ev_rect = {};
 
-                // We need to transform this according the hosting SVG
+                // We need to transform this according to the hosting SVG
                 let pt_tl = SVGProc.getSVGCoordinates({
                     "x": bcr.left + window.scrollX,
                     "y": bcr.top + window.scrollY
