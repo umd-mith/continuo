@@ -25,6 +25,7 @@ class FileUploadComponent extends Backbone.View {
                     filePromise.then(
                         (textdata) => {
                             Events.trigger('addFile', textdata);
+                            $(".cnt-uploadbox").remove();
                     })
                     .catch(
                         (reason) => {
