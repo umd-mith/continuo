@@ -244,12 +244,6 @@ class VerovioInteractionView extends Backbone.View {
                 ev_rect.right = pt_br.x;
                 ev_rect.bottom = pt_br.y;
 
-                console.log(ev_rect.left, d.x);
-                console.log(ev_rect.left, d.right);
-                console.log('...');
-                console.log(ev_rect.top, d.y);
-                console.log(ev_rect.top, d.bottom);
-
                 if (
                     (ev_rect.left >= d.x && ev_rect.left <= d.right &&
                     ev_rect.top >= d.y && ev_rect.top <= d.bottom) 
