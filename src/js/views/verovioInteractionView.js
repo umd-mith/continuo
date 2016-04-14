@@ -231,8 +231,8 @@ class VerovioInteractionView extends Backbone.View {
 
                 // We need to transform this according to the hosting SVG
                 let pt_tl = SVGProc.getSVGCoordinates({
-                    "x": bcr.left + window.scrollX,
-                    "y": bcr.top + window.scrollY
+                    "x": bcr.left,
+                    "y": bcr.top
                 }, vrv_page);
                 ev_rect.left = pt_tl.x;
                 ev_rect.top = pt_tl.y;
@@ -244,10 +244,16 @@ class VerovioInteractionView extends Backbone.View {
                 ev_rect.right = pt_br.x;
                 ev_rect.bottom = pt_br.y;
 
+                console.log(ev_rect.left, d.x);
+                console.log(ev_rect.left, d.right);
+                console.log('...');
+                console.log(ev_rect.top, d.y);
+                console.log(ev_rect.top, d.bottom);
+
                 if (
                     (ev_rect.left >= d.x && ev_rect.left <= d.right &&
                     ev_rect.top >= d.y && ev_rect.top <= d.bottom) 
-                    ||
+                    &&
                     (ev_rect.right >= d.x && ev_rect.right <= d.right &&
                     ev_rect.bottom >= d.y && ev_rect.bottom <= d.bottom)
                 ) {
