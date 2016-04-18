@@ -40,11 +40,17 @@ $hover_selection_color: #4d94ff;
         left: 1em;
     }
 
-    .cnt-uploadbox {
+    .cnt-controls {
 
-        .btn-file {
+        .cnt-btn {
             position: relative;
             overflow: hidden;
+            background-color: $selection_color;
+            padding: 5px;
+            margin-bottom: 10px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
 
             input[type=file] {
                 position: absolute;
@@ -61,10 +67,8 @@ $hover_selection_color: #4d94ff;
                 cursor: inherit;
                 display: block;
             }
-        }   
-
-        padding: 5px;
-        background-color: $selection_color;
+        }
+        
         position: fixed;
         top: 1em;
         right: 1em;

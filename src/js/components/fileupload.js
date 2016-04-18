@@ -10,7 +10,7 @@ class FileUploadComponent extends Backbone.View {
     initialize(){
 
         // Events
-        this.$el.on('change', '.btn-file :file', (e) => {
+        this.$el.on('change', '.cnt-file :file', (e) => {
             let input = $(e.target);
             let file = input.get(0).files[0];
             
@@ -25,7 +25,7 @@ class FileUploadComponent extends Backbone.View {
                     filePromise.then(
                         (textdata) => {
                             Events.trigger('addFile', textdata);
-                            $(".cnt-uploadbox").remove();
+                            $(".cnt-controls").remove();
                     })
                     .catch(
                         (reason) => {

@@ -5,6 +5,7 @@ import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
 import FileUploadComponent from './components/fileupload';
+import DropboxUploadComponent from './components/dropboxupload';
 import 'xmldom';
 
 // NOTES
@@ -63,11 +64,17 @@ class Continuo extends Backbone.View {
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
 
+        // Create controls floating box
+        let controls = $("<div class='cnt-controls'></div>");
+        container.append(controls);
+
         // Create EMA floating box
         let emaBox = $("<div class='cnt-emabox'></div>");
         container.append(emaBox);
 
-        new FileUploadComponent({"el":container});
+        // Render components (model-less subviews)
+        // new FileUploadComponent({"el":controls});
+        new DropboxUploadComponent({"el":controls});
     }
 
 }
