@@ -29,8 +29,12 @@
        &nbsp;
     </div>
     <script>
-        var cnt = new Continuo({"el": "#continuo", "mei": "./mei/DC0101.xml"});
-        cnt.render();
+        var opts = {"el": "#continuo"};
+        if (window.location.hash && window.location.hash != "") {
+            opts["mei"] = window.location.hash.substr(1);
+        }
+        var cnt = new Continuo(opts);
+        cnt.render();    
     </script>
 </body>
 
