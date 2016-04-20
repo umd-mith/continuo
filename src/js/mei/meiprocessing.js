@@ -72,22 +72,28 @@ meiprocessing.getDurationToMeter = function() {
 
 meiprocessing.getEventBeat = function() {
     let XPevent = this;
-    let dur = XPevent.xpath("@dur").val();
-    if (!dur){ throw "Element has no duration." }
 
-    var beat = 1.0;
-
-    // This is a bit inefficient because xpath.js doesn't support generate-id().
-    let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
-    for (let el of XPstaff.xpath("descendant::*[@dur][not(@grace)]")){
-        let $el = $(el);
-        if ($el.is(XPevent)) {
-            break;
-        }
-        beat += meiprocessing.getDurationToMeter.apply($el);
+    if (XPevent.xpath("self::mei:mRest", ns)){
+        return "all";
     }
+    else {
+        let dur = XPevent.xpath("@dur").val();
+        if (!dur){ throw "Element has no duration." }
 
-    return beat;
+        var beat = 1.0;
+
+        // This is a bit inefficient because xpath.js doesn't support generate-id().
+        let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
+        for (let el of XPstaff.xpath("descendant::*[@dur][not(@grace)]")){
+            let $el = $(el);
+            if ($el.is(XPevent)) {
+                break;
+            }
+            beat += meiprocessing.getDurationToMeter.apply($el);
+        }
+
+        return beat;
+    }
 
 }
 

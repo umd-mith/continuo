@@ -6,7 +6,7 @@ let extend_vrv = function(svg){
 
     let $svg = $(svg);
 
-    for (let el of $svg.find("g.note, g.rest")) {
+    for (let el of $svg.find("g.note, g.rest, g.mRest")) {
         let $el = $(el);
         let g1_attrs = {
             "class" : "cnt-selectable"
