@@ -31,11 +31,15 @@ $hover_selection_color: #4d94ff;
         display: none;
 
         .cnt-emaexpr {
-            font-family: Helvetica, Arial, Sans-Serif;
-            font-weight: bold;
-            line-height: 2em; 
-            color: #fff;
-            font-size: 30px;
+            
+
+            #cnt-emaexpr-expr {
+                font-family: Helvetica, Arial, Sans-Serif;
+                font-weight: bold;
+                line-height: 2em; 
+                color: #fff;
+                font-size: 30px;
+            }
         }
 
         .cnt-emabox-ctrls {
