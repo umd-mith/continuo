@@ -6,7 +6,12 @@ let extend_vrv = function(svg){
 
     let $svg = $(svg);
 
-    for (let el of $svg.find("g.note, g.rest, g.mRest")) {
+    for (let el of $svg.find("g.note, g.chord, g.rest, g.mRest")) {
+        // skip events within chords
+        if ($(el).parent().closest('g.chord').get(0)){
+            continue;
+        }
+
         let $el = $(el);
         let g1_attrs = {
             "class" : "cnt-selectable"
