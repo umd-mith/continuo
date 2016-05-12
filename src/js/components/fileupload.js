@@ -100,7 +100,10 @@ class _FileReader {
             $("body").on('cnt-fl-load-done', () => {
                 // TODO: Unclear why this fires one extra time with empty text.
                 if (this.text != "") {
-                    var textdata = {"filename": this.file.name, "string" : this.text};
+                    var textdata = {
+                        "filename": this.file.name, 
+                        "url": this.file.link, 
+                        "string" : this.text};
                     resolve(textdata);
                 }
             });

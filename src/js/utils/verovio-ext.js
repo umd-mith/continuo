@@ -30,6 +30,15 @@ let extend_vrv = function(svg){
 
     }
 
+    // Add some useful content to g.space
+    for (let el of $svg.find("g.space")) {
+        // console.log($(el).prevAll("*[x]"));
+        // console.log($(el).prevAll("g"));
+        // <text x="887" y="2390" dx="0" dy="0" text-anchor="end" font-size="0px">
+        //             <tspan font-family="Garamond" font-size="405px">Altus</tspan>
+        //         </text>
+    }
+
     return $svg.get(0);
 
 }

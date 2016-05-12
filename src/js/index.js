@@ -4,8 +4,10 @@ import VerovioInteractionView from './views/verovioInteractionView';
 import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
-import FileUploadComponent from './components/fileupload';
+import EMAExprComponent from './components/EMAexpr';
+// import FileUploadComponent from './components/fileupload';
 import DropboxUploadComponent from './components/dropboxupload';
+import FileFromWebComponent from './components/filefromweb';
 import 'xmldom';
 
 // NOTES
@@ -26,8 +28,8 @@ class Continuo extends Backbone.View {
 
     addFile(textData) {
         // Create score
-
         let container = this.$el.find(".cnt-container");
+        Events.trigger('component:emaBox:url', textData["url"]);
 
         let doc = new DOMParser().parseFromString(textData["string"], 'text/xml');
         this.MEIdata = new MEIdata(
@@ -64,17 +66,35 @@ class Continuo extends Backbone.View {
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
 
-        // Create controls floating box
-        let controls = $("<div class='cnt-controls'></div>");
-        container.append(controls);
+        if (this.mei) { 
+            $.ajax({
+                url: this.mei,
+                type: 'GET',
+                dataType: 'text',
+                success: (data)=>{
+                    this.addFile( {
+                        "filename": this.mei, 
+                        "url": this.mei, 
+                        "string" : data
+                    });
+                }
+            });
+        }
+        else {
+            // Create controls floating box
+            let controls = $("<div class='cnt-controls'></div>");
+            container.append(controls);
 
-        // Create EMA floating box
-        let emaBox = $("<div class='cnt-emabox'></div>");
-        container.append(emaBox);
+            // Render components (model-less subviews)
+            // new FileUploadComponent({"el":controls});
+            new DropboxUploadComponent({"el":controls});
+            new FileFromWebComponent({"el":controls});
+        }        
 
-        // Render components (model-less subviews)
-        // new FileUploadComponent({"el":controls});
-        new DropboxUploadComponent({"el":controls});
+        // Create EMA floating box        
+        container.append(new EMAExprComponent().render());
+
+        
     }
 
 }

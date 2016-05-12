@@ -37,43 +37,49 @@ meiprocessing.getClosestMeter = function() {
 
 meiprocessing.getDurationToMeter = function() {
     let XPevent = this;
-    let dur = XPevent.xpath("@dur").val();
-    if (!dur){ throw "Element has no duration." }
-    let dots = 0;
-    if (dur == "breve"){
-        dur = 0.5;
-    }
-    else if (dur == "long") {
-        dur = 0.25;
-    }
-    dur = Number(dur);
-    let attr = XPevent.xpath("@dots").val();
-    let els = XPevent.xpath("dot");
-    if (attr) {
-        dots = parseInt(attr);
-    }
-    else if (els) {
-        dots = els.length;
-    }
 
-    // Calculate duration relative to meter
-    let meter = meiprocessing.getClosestMeter.apply(this);
-    var relative_dur = meter.unit / dur;
-
-    var dot_dur = dur;
-    for (let d of Array.from(new Array(dots), (x,i) => i)) {
-        dot_dur = dot_dur * 2;
-        relative_dur += meter.unit / dot_dur;
+    if (XPevent.xpath("self::mei:mRest", ns).length > 0){
+        return "all";
     }
+    else {
+        let dur = XPevent.xpath("@dur").val();
+        if (!dur){ throw "Element has no duration." }
+        let dots = 0;
+        if (dur == "breve"){
+            dur = 0.5;
+        }
+        else if (dur == "long") {
+            dur = 0.25;
+        }
+        dur = Number(dur);
+        let attr = XPevent.xpath("@dots").val();
+        let els = XPevent.xpath("dot");
+        if (attr) {
+            dots = parseInt(attr);
+        }
+        else if (els) {
+            dots = els.length;
+        }
 
-    return relative_dur;
+        // Calculate duration relative to meter
+        let meter = meiprocessing.getClosestMeter.apply(this);
+        var relative_dur = meter.unit / dur;
+
+        var dot_dur = dur;
+        for (let d of Array.from(new Array(dots), (x,i) => i)) {
+            dot_dur = dot_dur * 2;
+            relative_dur += meter.unit / dot_dur;
+        }
+
+        return relative_dur;
+    }
 
 };
 
 meiprocessing.getEventBeat = function() {
     let XPevent = this;
 
-    if (XPevent.xpath("self::mei:mRest", ns)){
+    if (XPevent.xpath("self::mei:mRest", ns).length > 0){
         return "all";
     }
     else {

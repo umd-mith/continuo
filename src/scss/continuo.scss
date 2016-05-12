@@ -24,17 +24,44 @@ $hover_selection_color: #4d94ff;
             fill            : $selection_color;
             fill-opacity    : .3;
         }
+
     }
 
     .cnt-emabox {
         display: none;
-        font-family: Helvetica, Arial, Sans-Serif;
-        font-weight: bold;
-        line-height: 2em;
-        background-color: $selection_color;
-        color: #fff;
-        padding: 5px;
-        font-size: 30px;
+
+        .cnt-emaexpr {
+            font-family: Helvetica, Arial, Sans-Serif;
+            font-weight: bold;
+            line-height: 2em; 
+            color: #fff;
+            font-size: 30px;
+        }
+
+        .cnt-emabox-ctrls {
+            float: right;
+            margin-top: 0;
+            margin-bottom: 5px;
+
+            li {
+                display: inline;
+                list-style: none;
+                margin-left: 5px;
+                background-color: lightgrey;
+                padding: 5px;
+                border-radius: 3px;
+
+                a:link, a:hover, a:visited, a:active {
+                    text-decoration: none;
+                    color: black;
+                }
+
+            }
+
+        }
+
+        background-color: $selection_color;        
+        padding: 5px;        
         position: fixed;
         top: 1em;
         left: 1em;
@@ -50,7 +77,11 @@ $hover_selection_color: #4d94ff;
             margin-bottom: 10px;
             color: white;
             border-radius: 5px;
-            cursor: pointer;
+
+            a:link, a:visited, a:active {
+                color: white;
+                text-decoration: none;
+            }
 
             input[type=file] {
                 position: absolute;
@@ -67,6 +98,13 @@ $hover_selection_color: #4d94ff;
                 cursor: inherit;
                 display: block;
             }
+        }
+
+        #cnt-ffw-input {
+            display: none;
+        }
+        #cnt-ffw-loading {
+            display: none;
         }
         
         position: fixed;

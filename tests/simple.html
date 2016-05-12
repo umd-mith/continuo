@@ -29,7 +29,15 @@
        &nbsp;
     </div>
     <script>
-        var cnt = new Continuo({"el": "#continuo", "mei": "./mei/DC0101.xml"});
+        // var cnt = new Continuo({"el": "#continuo", "mei": "./mei/DC0101.xml"});
+        // var cnt = new Continuo({"el": "#continuo", "mei": "http://localhost:5000/https%3A%2F%2Fdl.dropboxusercontent.com%2F1%2Fview%2Frr6v35m6r9axtts%2FMEI%2FCRIM_Mass_0005_Sanctus_ms.mei/1/all/@all"});
+        // var mei = sessionStorage.getItem("URL");
+        // console.log(mei);
+        var opts = {"el": "#continuo"};
+        if (window.location.hash && window.location.hash != "") {
+            opts["mei"] = window.location.hash.substr(1);
+        }
+        var cnt = new Continuo(opts);
         cnt.render();
     </script>
 </body>

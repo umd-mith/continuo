@@ -1,3 +1,3 @@
 export default `
-<div class='cnt-btn ctn-drpbtn'>Open from Dropbox</div></div>
+<div class='cnt-btn ctn-drpbtn'><a href="#">Open from Dropbox</a></div>
 `
