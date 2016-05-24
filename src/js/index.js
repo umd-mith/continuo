@@ -17,6 +17,7 @@ class Continuo extends Backbone.View {
 
     initialize(options) {
         this.mei = options.mei;
+        this.omas = options.omas;
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
         this.listenTo(Events, 'addFile', this.addFile);
     }
@@ -67,8 +68,14 @@ class Continuo extends Backbone.View {
         this.$el.append(container);
 
         if (this.mei) { 
+            let url = this.mei;
+            
+            if (this.omas) {
+                url = this.omas + encodeURIComponent(this.mei) + "/all/all/@all";
+            }
+
             $.ajax({
-                url: this.mei,
+                url: url,
                 type: 'GET',
                 dataType: 'text',
                 success: (data)=>{
