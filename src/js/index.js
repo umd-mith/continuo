@@ -37,6 +37,7 @@ class Continuo extends Backbone.View {
             {"doc": doc, 
              "string": textData["string"]
             });
+        this.MEIdata.generate_ids();
 
         // Sadly, importing Verovio crashes babelify, 
         // so we assume it's globally available
