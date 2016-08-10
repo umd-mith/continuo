@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Continuo Test</title>
-    <script src="../lib/verovio/verovio-toolkit-light-0.9.10.js"></script>
+    <script src="../lib/verovio/verovio-toolkit-light.js"></script>
     <script src="../dist/js/continuo.js"></script>
     <link rel="stylesheet" type="text/css" href="../dist/css/continuo.css" />
     <style>
@@ -33,7 +33,7 @@
         if (window.location.hash && window.location.hash != "") {
             var mei = window.location.hash.substr(1);
             // If it ends with MEI or XML, load it whole via Omas
-            if (mei.search(/\.(xml|mei)$/)) {
+            if (mei.search(/\.(xml|mei)$/) != -1) {
                 opts["mei"] = mei; //"http://mith.umd.edu/ema/" + encodeURIComponent(mei) + "/all/all/@all";
                 opts["omas"] = "http://mith.umd.edu/ema/";
             }
