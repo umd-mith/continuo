@@ -71,6 +71,23 @@ meiprocessing.getDurationToMeter = function() {
             relative_dur += meter.unit / dot_dur;
         }
 
+        // Adjust duration if this event is contained in a tuplet
+        // TODO: deal with teupletspan
+        let XPtupl = XPevent.xpath("ancestor::mei:tuplet", ns);
+        if (XPtupl) {
+            let numbase = XPtupl.xpath("@numbase");
+            let num = XPtupl.xpath("@num");
+
+            if (!num || !numbase) {
+                throw "Cannot understand tuplet beat: both @num and @numbase must be present";
+            }
+            else {
+                let tupl_ratio = parseFloat(numbase.val()) / parseFloat(num.val());
+                relative_dur = relative_dur * tupl_ratio;
+            }
+
+        }
+
         return relative_dur;
     }
 
@@ -98,7 +115,7 @@ meiprocessing.getEventBeat = function() {
             beat += meiprocessing.getDurationToMeter.apply($el);
         }
 
-        return beat;
+        return parseFloat(beat.toFixed(4));
     }
 
 }
