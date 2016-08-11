@@ -74,7 +74,7 @@ meiprocessing.getDurationToMeter = function() {
         // Adjust duration if this event is contained in a tuplet
         // TODO: deal with teupletspan
         let XPtupl = XPevent.xpath("ancestor::mei:tuplet", ns);
-        if (XPtupl) {
+        if (XPtupl.length > 0) {
             let numbase = XPtupl.xpath("@numbase");
             let num = XPtupl.xpath("@num");
 
@@ -109,7 +109,7 @@ meiprocessing.getEventBeat = function() {
         let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
         for (let el of XPstaff.xpath("descendant::*[@dur][not(@grace)]")){
             let $el = $(el);
-            if ($el.is(XPevent)) {
+            if ($el.attr("xml:id") == XPevent.attr("xml:id")) {
                 break;
             }
             beat += meiprocessing.getDurationToMeter.apply($el);
