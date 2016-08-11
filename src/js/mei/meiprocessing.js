@@ -12,24 +12,21 @@ meiprocessing.getClosestMeter = function() {
     // Process for beat data if the scoreDef defines meter, otherwise lookback
     let count = XPscoreDef.attr("meter.count");
     let unit = XPscoreDef.attr("meter.unit");
-    // let count = XPscoreDef.xpath("@meter.count").val();
-    // let unit = XPscoreDef.xpath("@meter.unit").val();
     if (!count || !unit) {
-        count_elm = XPscoreDef.xpath("descendant::mei:meterSig", ns);
-        if (count_elm){
-            // (not tested)
+        let count_elm = XPscoreDef.xpath("descendant::mei:meterSig", ns);
+        if (count_elm.length > 0){
             if (count_elm.length > 1) {
                 throw "Mixed meter is not supported";
             }
-            count = count_elm[0].xpath("@count").val();
-            unit = count_elm[0].xpath("@unit").val();
+            let count = count_elm[0].xpath("@count").val();
+            let unit = count_elm[0].xpath("@unit").val();
             if (!count || !unit){
                 throw "Could not locate meter and compute beats";
             }
         }
-        // No meter specified, lookback (not tested)
+        // No meter specified, lookback 
         else {
-            meiprocessing.getClosestMeter.apply(this);
+            return meiprocessing.getClosestMeter.apply(XPscoreDef);
         }
     }
     return {"count" : count, "unit" : unit}
