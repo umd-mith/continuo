@@ -45,7 +45,7 @@ class VerovioInteractionView extends Backbone.View {
 
             let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
             let staff_id = XPstaff.xpath('@xml:id').val();
-            let measure_idx = XPmeasure.xpath("preceding::mei:measure", ns).length + 1;
+            let measure_idx = XPmeasure.xpath("preceding::mei:measure[ancestor::mei:music]", ns).length + 1;
 
             var measure = this.measures.get(measure_id);
             if (!measure) {
