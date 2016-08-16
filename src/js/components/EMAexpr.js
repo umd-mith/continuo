@@ -37,12 +37,12 @@ class EMAExprComponent extends Backbone.View {
         }
         else {
             this.expr = expr;    
-            // let server = "http://localhost:5000";
-            let server = "http://mith.umd.edu/ema";
+            let server = "http://localhost:5000";
+            // let server = "http://mith.umd.edu/ema";
             let loc = window.location.origin+window.location.pathname;
             let tpl_data = {
                 "expr" : expr,
-                "url" : loc + "#" + server + "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr
+                "url" : loc + "#" + server + "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr + "/highlight"
             }
             this.$el.html(this.template(tpl_data));
             this.delegateEvents(this.events);1            

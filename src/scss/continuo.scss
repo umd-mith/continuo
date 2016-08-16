@@ -1,11 +1,17 @@
 $selection_color: #0066ff;
 $hover_selection_color: #4d94ff; 
+$highlight_color: #ff9900;
 
 .cnt-container {
     svg {
 
         .cnt-selected {
             color: $selection_color; 
+            fill: currentColor;
+        }
+
+        .cnt-highlighted {
+            color: $highlight_color; 
             fill: currentColor;
         }
 

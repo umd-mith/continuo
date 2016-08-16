@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as Backbone from 'backbone';
 import VerovioInteractionView from './views/verovioInteractionView';
+import HighlightView from './views/highlightView';
 import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
@@ -62,6 +63,13 @@ class Continuo extends Backbone.View {
             container.append(ext_svg);
         }
         new VerovioInteractionView({"el": container, "model": this.MEIdata});
+
+        // Determine if notation must be highlighted
+        let api_opts = textData["url"].split("/").pop();
+        if (api_opts.includes("highlight")) {
+            new HighlightView({"el": container, "model": this.MEIdata});
+        }
+
     }
 
     render(){        
