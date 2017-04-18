@@ -1,6 +1,6 @@
 {
   "name": "continuo",
-  "version": "0.1.0 ",
+  "version": "0.1.0",
   "description": "Select notes on a rendered MEI music score and create permalinks using the Music Addressability URL scheme.",
   "main": "src/index.js",
   "scripts": {
