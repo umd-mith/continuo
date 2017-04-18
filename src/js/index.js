@@ -6,9 +6,6 @@ import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
 import EMAExprComponent from './components/EMAexpr';
-// import FileUploadComponent from './components/fileupload';
-import DropboxUploadComponent from './components/dropboxupload';
-import FileFromWebComponent from './components/filefromweb';
 import 'xmldom';
 
 // NOTES
@@ -22,7 +19,7 @@ class Continuo extends Backbone.View {
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
         this.listenTo(Events, 'addFile', this.addFile);
     }
-  
+
     updateEmaBox(expr){
         $(".cnt-emabox").show();
         $(".cnt-emabox").text(expr);
@@ -35,12 +32,12 @@ class Continuo extends Backbone.View {
 
         let doc = new DOMParser().parseFromString(textData["string"], 'text/xml');
         this.MEIdata = new MEIdata(
-            {"doc": doc, 
+            {"doc": doc,
              "string": textData["string"]
             });
         this.MEIdata.generate_ids();
 
-        // Sadly, importing Verovio crashes babelify, 
+        // Sadly, importing Verovio crashes babelify,
         // so we assume it's globally available
         // i.e. verovio must be defined.
         let vrvToolkit = new verovio.toolkit();
@@ -72,13 +69,13 @@ class Continuo extends Backbone.View {
 
     }
 
-    render(){        
+    render(){
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
 
-        if (this.mei) { 
+        if (this.mei) {
             let url = this.mei;
-            
+
             if (this.omas) {
                 url = this.omas + encodeURIComponent(this.mei) + "/all/all/@all";
             }
@@ -89,33 +86,33 @@ class Continuo extends Backbone.View {
                 dataType: 'text',
                 success: (data)=>{
                     this.addFile( {
-                        "filename": this.mei, 
-                        "url": this.mei, 
+                        "filename": this.mei,
+                        "url": this.mei,
                         "string" : data
                     });
                 }
             });
         }
-        else {
-            // Create controls floating box
-            let controls = $("<div class='cnt-controls'></div>");
-            container.append(controls);
+        // else {
+        //     // Create controls floating box
+        //     let controls = $("<div class='cnt-controls'></div>");
+        //     container.append(controls);
+        //
+        //     // Render components (model-less subviews)
+        //     // new FileUploadComponent({"el":controls});
+        //     new DropboxUploadComponent({"el":controls});
+        //     new FileFromWebComponent({"el":controls});
+        // }
 
-            // Render components (model-less subviews)
-            // new FileUploadComponent({"el":controls});
-            new DropboxUploadComponent({"el":controls});
-            new FileFromWebComponent({"el":controls});
-        }        
-
-        // Create EMA floating box        
+        // Create EMA floating box
         container.append(new EMAExprComponent().render());
 
-        
+
     }
 
 }
 
-// Make main class available to pre-ES6 browser environments 
+// Make main class available to pre-ES6 browser environments
 if (window) {
     window.Continuo = Continuo;
 }

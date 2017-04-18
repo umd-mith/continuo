@@ -1,17 +1,25 @@
 $selection_color: #0066ff;
-$hover_selection_color: #4d94ff; 
+$hover_selection_color: #4d94ff;
 $highlight_color: #ff9900;
 
 .cnt-container {
+
     svg {
 
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
         .cnt-selected {
-            color: $selection_color; 
+            color: $selection_color;
             fill: currentColor;
         }
 
         .cnt-highlighted {
-            color: $highlight_color; 
+            color: $highlight_color;
             fill: currentColor;
         }
 
@@ -35,90 +43,41 @@ $highlight_color: #ff9900;
 
     .cnt-emabox {
         display: none;
+        border-radius: .5em;
+        margin-left: 20px;
 
         .cnt-emaexpr {
-            
 
             #cnt-emaexpr-expr {
                 font-family: Helvetica, Arial, Sans-Serif;
                 font-weight: bold;
-                line-height: 2em; 
+                line-height: 2em;
                 color: #fff;
                 font-size: 30px;
+
             }
-        }
 
-        .cnt-emabox-ctrls {
-            float: right;
-            margin-top: 0;
-            margin-bottom: 5px;
+            #cnt-emabox-cp {
+              position: absolute;
+              left: -20px;
+              top: 2px;
+              font-size: 17px;
+              background-color: #e0e0e0;
+              border-radius: 20px;
+              padding: 2px 8px 2px 8px;
+            }
 
-            li {
-                display: inline;
-                list-style: none;
-                margin-left: 5px;
-                background-color: lightgrey;
-                padding: 5px;
-                border-radius: 3px;
-
-                a:link, a:hover, a:visited, a:active {
-                    text-decoration: none;
-                    color: black;
-                }
-
+            a:link, a:hover, a:visited, a:active {
+                text-decoration: none;
+                color: black;
             }
 
         }
 
-        background-color: $selection_color;        
-        padding: 5px;        
+        background-color: $selection_color;
+        padding: 5px;
         position: fixed;
         top: 1em;
         left: 1em;
-    }
-
-    .cnt-controls {
-
-        .cnt-btn {
-            position: relative;
-            overflow: hidden;
-            background-color: $selection_color;
-            padding: 5px;
-            margin-bottom: 10px;
-            color: white;
-            border-radius: 5px;
-
-            a:link, a:visited, a:active {
-                color: white;
-                text-decoration: none;
-            }
-
-            input[type=file] {
-                position: absolute;
-                top: 0;
-                right: 0;
-                min-width: 100%;
-                min-height: 100%;
-                font-size: 100px;
-                text-align: right;
-                filter: alpha(opacity=0);
-                opacity: 0;
-                outline: none;
-                background: white;
-                cursor: inherit;
-                display: block;
-            }
-        }
-
-        #cnt-ffw-input {
-            display: none;
-        }
-        #cnt-ffw-loading {
-            display: none;
-        }
-        
-        position: fixed;
-        top: 1em;
-        right: 1em;
     }
 }
