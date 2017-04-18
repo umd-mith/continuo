@@ -15,6 +15,7 @@ class Continuo extends Backbone.View {
 
     initialize(options) {
         this.mei = options.mei;
+        this.meiString = options.meiString;
         this.omas = options.omas;
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
         this.listenTo(Events, 'addFile', this.addFile);
@@ -73,7 +74,14 @@ class Continuo extends Backbone.View {
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
 
-        if (this.mei) {
+        if (this.meiString) {
+          this.addFile( {
+              "filename": "",
+              "url": "",
+              "string" : this.meiString
+          });
+        }
+        else if (this.mei) {
             let url = this.mei;
 
             if (this.omas) {

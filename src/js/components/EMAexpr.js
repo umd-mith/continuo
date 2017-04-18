@@ -4,14 +4,14 @@ import Events from '../utils/backbone-events';
 import emaexpr_tpl from '../templates/emaexpr-tpl';
 
 class EMAExprComponent extends Backbone.View {
-    
+
     get className() {
         return "cnt-emabox";
     }
 
     get events() {
         return {
-            "click .cnt-emabox-cp": this.copyExpr
+            "click #cnt-emabox-cp": this.copyExpr
         }
     }
 
@@ -36,7 +36,7 @@ class EMAExprComponent extends Backbone.View {
             this.$el.hide();
         }
         else {
-            this.expr = expr;    
+            this.expr = expr;
             // let server = "http://localhost:5000";
             let server = "http://mith.umd.edu/ema";
             let loc = window.location.origin+window.location.pathname;
@@ -45,11 +45,11 @@ class EMAExprComponent extends Backbone.View {
                 "url" : loc + "#" + server + "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr + "/highlight"
             }
             this.$el.html(this.template(tpl_data));
-            this.delegateEvents(this.events);1            
+            this.delegateEvents(this.events);1
         }
     }
 
-    render() {      
+    render() {
       return this.$el;
     }
 
