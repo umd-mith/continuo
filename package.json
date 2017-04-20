@@ -5,8 +5,6 @@
   "main": "./lib/continuo.js",
   "scripts": {
     "build": "babel src --out-dir lib",
-    "build-test-es5": "npm run build && babel test --out-dir test-es5 && sed -i 's/\\/src\\//\\/lib\\//' test-es5/*.js",
-    "build-web": "npm run build && browserify lib/squash-xml-json.js --standalone sxj -o lib/squash-xml-json-web.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublish": "npm run build"
   },
