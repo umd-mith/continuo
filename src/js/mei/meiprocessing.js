@@ -1,5 +1,5 @@
 var $ = global.jQuery = require('jquery');
-require('../../../node_modules/jquery-xpath/jquery.xpath');
+require('../../../lib/jquery-xpath/jquery.xpath');
 
 import ns from '../utils/namespace';
 
@@ -24,7 +24,7 @@ meiprocessing.getClosestMeter = function() {
                 throw "Could not locate meter and compute beats";
             }
         }
-        // No meter specified, lookback 
+        // No meter specified, lookback
         else {
             return meiprocessing.getClosestMeter.apply(XPscoreDef);
         }

@@ -1,10 +1,19 @@
 {
   "name": "continuo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Select notes on a rendered MEI music score and create permalinks using the Music Addressability URL scheme.",
-  "main": "src/index.js",
+  "main": "./lib/continuo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src --out-dir lib",
+    "build-test-es5": "npm run build && babel test --out-dir test-es5 && sed -i 's/\\/src\\//\\/lib\\//' test-es5/*.js",
+    "build-web": "npm run build && browserify lib/squash-xml-json.js --standalone sxj -o lib/squash-xml-json-web.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   },
   "keywords": [
     "Music notation",
@@ -15,9 +24,11 @@
   "author": "Raff Viglianti, University of Maryland",
   "license": "Apache-2.0",
   "devDependencies": {
+    "babel-cli": "^6.2.4",
     "babel-preset-es2015": "^6.6.0",
+    "babel-register": "^6.2.0",
     "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
+    "browserify": "^14.1.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-connect": "^3.1.0",
@@ -27,14 +38,17 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
-    "handlebars": "^4.0.5",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "xmldom": "^0.1.22"
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "backbone": "^1.3.1",
     "jquery": "^2.2.1",
-    "jquery-xpath": "^0.3.1"
+    "xmldom": "^0.1.22",
+    "handlebars": "^4.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umd-mith/continuo"
   }
 }

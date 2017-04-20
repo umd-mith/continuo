@@ -18,9 +18,9 @@ gulp.task('build:es6', function() {
         entries: './src/js/index.js',
         debug: true
     })
-    .transform("babelify", {presets: ['es2015']})
+    .transform("babelify", {presets: ['es2015'], compact: false })
     .bundle()
-    .on('error', function (err) { 
+    .on('error', function (err) {
         gutil.log("Error : " + err.message);
         this.emit('end'); // This is needed for the watch task, or it'll hang on error
     })

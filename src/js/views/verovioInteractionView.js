@@ -1,5 +1,5 @@
 var $ = global.jQuery = require('jquery');
-require('../../../node_modules/jquery-xpath/jquery.xpath');
+require('../../../lib/jquery-xpath/jquery.xpath');
 
 import * as Backbone from 'backbone';
 import ns from '../utils/namespace';
@@ -34,11 +34,11 @@ class VerovioInteractionView extends Backbone.View {
 
     addMusEvent($mei_el) {
         $mei_el = $mei_el.parent();
-        var ev_id = $mei_el.attr("id");  
+        var ev_id = $mei_el.attr("id");
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
         if (!$mei_el.hasClass("cnt-selected")) {
-            $mei_el.addClass("cnt-selected");                      
+            $mei_el.addClass("cnt-selected");
 
             let XPmeasure = XPevent.xpath("ancestor::mei:measure[1]", ns);
             let measure_id = XPmeasure.xpath('@xml:id').val();
@@ -88,7 +88,7 @@ class VerovioInteractionView extends Backbone.View {
 
     removeMusEvent($mei_el){
         $mei_el = $mei_el.parent();
-        var ev_id = $mei_el.attr("id");  
+        var ev_id = $mei_el.attr("id");
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
         if ($mei_el.hasClass("cnt-selected")) {
@@ -156,7 +156,7 @@ class VerovioInteractionView extends Backbone.View {
     }
 
     areaSelect(e) {
-        e.preventDefault(); 
+        e.preventDefault();
         if (this.selecting) {
             this.dragging = true;
 
@@ -180,14 +180,14 @@ class VerovioInteractionView extends Backbone.View {
                     d.x = loc.x;
                     d.width -= move.x;
                 } else {
-                    d.width = move.x;       
+                    d.width = move.x;
                 }
 
                 if( move.y < 1 || (move.y*2<d.height)) {
                     d.y = loc.y;
                     d.height -= move.y;
                 } else {
-                    d.height = move.y;       
+                    d.height = move.y;
                 }
 
                 s.attr(d);
@@ -246,7 +246,7 @@ class VerovioInteractionView extends Backbone.View {
 
                 if (
                     (ev_rect.left >= d.x && ev_rect.left <= d.right &&
-                    ev_rect.top >= d.y && ev_rect.top <= d.bottom) 
+                    ev_rect.top >= d.y && ev_rect.top <= d.bottom)
                     &&
                     (ev_rect.right >= d.x && ev_rect.right <= d.right &&
                     ev_rect.bottom >= d.y && ev_rect.bottom <= d.bottom)
@@ -259,12 +259,12 @@ class VerovioInteractionView extends Backbone.View {
                         this.addMusEvent($(ev));
                     }
                 }
-                
+
             });
 
             // Remove selection rectangle
             s.remove();
-        }      
+        }
 
         // Reset mouse flags.
         this.selecting = false;
