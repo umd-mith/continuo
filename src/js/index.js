@@ -21,7 +21,9 @@ class Continuo extends Backbone.View {
         this.verovioToolkit = options.verovioToolkit;
         this.verovioOptions = options.verovioOptions;
         this.paginate = options.paginate;
-        this.showControls = options.showControls;
+        this.showPageCtrls =
+          options.showPageCtrls === null || options.showPageCtrls === undefined ? true
+          : options.showPageCtrls
         this.page = 1;
         this.selectedElements = [];
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
@@ -132,7 +134,7 @@ class Continuo extends Backbone.View {
         // Create EMA floating box
         container.append(new EMAExprComponent().render());
 
-        if (this.paginate) {
+        if (this.paginate && this.showPageCtrls) {
           // Create pagination floating box
           container.append(new Pagination().render());
         }
@@ -153,7 +155,7 @@ class Continuo extends Backbone.View {
           if (!$mei_el.hasClass("cnt-selected")) {
             $mei_el.addClass("cnt-selected");
           }
-        }        
+        }
       }
     }
 
