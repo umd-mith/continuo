@@ -41,20 +41,36 @@ $highlight_color: #ff9900;
 
     }
 
+    .cnt-pagination {
+      position: fixed;
+      top: 1em;
+      right: 1em;
+
+      a {
+        font-size: 17px;
+        background-color: #e0e0e0;
+        border-radius: 20px;
+        padding: 2px 8px 2px 8px;
+      }
+
+      a:link, a:hover, a:visited, a:active {
+          text-decoration: none;
+          color: black;
+      }
+    }
+
     .cnt-emabox {
         display: none;
         border-radius: .5em;
         margin-left: 20px;
 
         .cnt-emaexpr {
-
             #cnt-emaexpr-expr {
                 font-family: Helvetica, Arial, Sans-Serif;
                 font-weight: bold;
                 line-height: 2em;
                 color: #fff;
                 font-size: 30px;
-
             }
 
             #cnt-emabox-cp {

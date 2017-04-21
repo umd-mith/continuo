@@ -35,6 +35,7 @@ class VerovioInteractionView extends Backbone.View {
     addMusEvent($mei_el) {
         $mei_el = $mei_el.parent();
         var ev_id = $mei_el.attr("id");
+        Events.trigger("selectElement", ev_id)
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
         if (!$mei_el.hasClass("cnt-selected")) {
@@ -89,6 +90,7 @@ class VerovioInteractionView extends Backbone.View {
     removeMusEvent($mei_el){
         $mei_el = $mei_el.parent();
         var ev_id = $mei_el.attr("id");
+        Events.trigger("deselectElement", ev_id)
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
 
         if ($mei_el.hasClass("cnt-selected")) {

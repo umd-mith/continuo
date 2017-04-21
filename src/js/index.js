@@ -6,6 +6,7 @@ import MEIdata from './data/model-MEIdata';
 import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
 import EMAExprComponent from './components/EMAexpr';
+import Pagination from './components/pagination';
 import 'xmldom';
 
 // NOTES
@@ -17,8 +18,23 @@ class Continuo extends Backbone.View {
         this.mei = options.mei;
         this.meiString = options.meiString;
         this.omas = options.omas;
+        this.verovioToolkit = options.verovioToolkit;
+        this.verovioOptions = options.verovioOptions;
+        this.paginate = options.paginate;
+        this.showControls = options.showControls;
+        this.page = 1;
+        this.selectedElements = [];
         this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
         this.listenTo(Events, 'addFile', this.addFile);
+        this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
+        this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
+        this.listenTo(Events, 'selectElement', (id) => {this.selectedElements.push(id)});
+        this.listenTo(Events, 'deselectElement', (id) => {
+          let index = this.selectedElements.indexOf(id)
+          if (index > -1) {
+              this.selectedElements.splice(index, 1);
+          }
+        });
     }
 
     updateEmaBox(expr){
@@ -41,24 +57,35 @@ class Continuo extends Backbone.View {
         // Sadly, importing Verovio crashes babelify,
         // so we assume it's globally available
         // i.e. verovio must be defined.
-        let vrvToolkit = new verovio.toolkit();
-        let scale = 50;
-        let options = JSON.stringify({
+        let vrvToolkit = this.verovioToolkit ? this.verovioToolkit : new verovio.toolkit();
+        this.vrvToolkit = vrvToolkit;
+        let scale = 50
+        let options = this.verovioOptions ? this.verovioOptions : {
             pageWidth: this.$el.width() * 100 / scale,
+            pageHeight: this.$el.height() * 100 / scale,
             ignoreLayout: 1,
             adjustPageHeight: 1,
             border: 50,
             scale: scale
-        });
+        };
         vrvToolkit.setOptions(options);
         let mei = textData["string"];
         vrvToolkit.loadData( mei + "\n", "" );
-        let pgs = vrvToolkit.getPageCount();
-        for (let page of Array.from(new Array(pgs), (x,i) => i)) {
-            let svg = vrvToolkit.renderPage(page+1);
 
-            let ext_svg = extend_vrv(svg);
-            container.append(ext_svg);
+        if (this.paginate) {
+          this.page = 1;
+          let svg = vrvToolkit.renderPage(1);
+          let ext_svg = extend_vrv(svg);
+          container.append(ext_svg);
+        }
+        else {
+          let pgs = vrvToolkit.getPageCount();
+          for (let page of Array.from(new Array(pgs), (x,i) => i)) {
+              let svg = vrvToolkit.renderPage(page+1);
+
+              let ext_svg = extend_vrv(svg);
+              container.append(ext_svg);
+          }
         }
         new VerovioInteractionView({"el": container, "model": this.MEIdata});
 
@@ -101,21 +128,33 @@ class Continuo extends Backbone.View {
                 }
             });
         }
-        // else {
-        //     // Create controls floating box
-        //     let controls = $("<div class='cnt-controls'></div>");
-        //     container.append(controls);
-        //
-        //     // Render components (model-less subviews)
-        //     // new FileUploadComponent({"el":controls});
-        //     new DropboxUploadComponent({"el":controls});
-        //     new FileFromWebComponent({"el":controls});
-        // }
 
         // Create EMA floating box
         container.append(new EMAExprComponent().render());
 
+        if (this.paginate) {
+          // Create pagination floating box
+          container.append(new Pagination().render());
+        }
 
+    }
+
+    renderPage (page) {
+      if (page > 0 && page <= this.vrvToolkit.getPageCount()) {
+        this.page = page;
+        let container = this.$el.find(".cnt-container");
+        let svg = this.vrvToolkit.renderPage(page);
+        let ext_svg = extend_vrv(svg);
+        container.find('svg').replaceWith(ext_svg);
+
+        // Highlight ids
+        for (let id of this.selectedElements) {
+          let $mei_el = $("#"+id)
+          if (!$mei_el.hasClass("cnt-selected")) {
+            $mei_el.addClass("cnt-selected");
+          }
+        }        
+      }
     }
 
 }
