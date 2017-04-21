@@ -65,7 +65,7 @@ $highlight_color: #ff9900;
         margin-left: 20px;
 
         .cnt-emaexpr {
-            #cnt-emaexpr-expr {
+            .cnt-emaexpr-expr {
                 font-family: Helvetica, Arial, Sans-Serif;
                 font-weight: bold;
                 line-height: 2em;
@@ -73,7 +73,7 @@ $highlight_color: #ff9900;
                 font-size: 30px;
             }
 
-            #cnt-emabox-cp {
+            .cnt-emabox-cp {
               position: absolute;
               left: -20px;
               top: 2px;

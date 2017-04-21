@@ -11,8 +11,8 @@ class Pagination extends Backbone.View {
 
     get events() {
         return {
-            "click #cnt-pagination-next": () => {Events.trigger("component:pagination:next")},
-            "click #cnt-pagination-prev": () => {Events.trigger("component:pagination:prev")}
+            "click .cnt-pagination-next": () => {Events.trigger("component:pagination:next")},
+            "click .cnt-pagination-prev": () => {Events.trigger("component:pagination:prev")}
         }
     }
 

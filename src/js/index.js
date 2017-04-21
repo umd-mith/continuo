@@ -15,6 +15,7 @@ import 'xmldom';
 class Continuo extends Backbone.View {
 
     initialize(options) {
+
         this.mei = options.mei;
         this.meiString = options.meiString;
         this.omas = options.omas;
@@ -26,28 +27,15 @@ class Continuo extends Backbone.View {
           : options.showPageCtrls
         this.page = 1;
         this.selectedElements = [];
-        this.listenTo(Events, 'component:emaBox', this.updateEmaBox);
         this.listenTo(Events, 'addFile', this.addFile);
         this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
         this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
-        this.listenTo(Events, 'selectElement', (id) => {this.selectedElements.push(id)});
-        this.listenTo(Events, 'deselectElement', (id) => {
-          let index = this.selectedElements.indexOf(id)
-          if (index > -1) {
-              this.selectedElements.splice(index, 1);
-          }
-        });
-    }
-
-    updateEmaBox(expr){
-        $(".cnt-emabox").show();
-        $(".cnt-emabox").text(expr);
     }
 
     addFile(textData) {
         // Create score
         let container = this.$el.find(".cnt-container");
-        Events.trigger('component:emaBox:url', textData["url"]);
+        this.EMAComponent.trigger('component:emaBox:url', textData["url"]);
 
         let doc = new DOMParser().parseFromString(textData["string"], 'text/xml');
         this.MEIdata = new MEIdata(
@@ -89,7 +77,15 @@ class Continuo extends Backbone.View {
               container.append(ext_svg);
           }
         }
-        new VerovioInteractionView({"el": container, "model": this.MEIdata});
+        let interView = new VerovioInteractionView({"el": container, "model": this.MEIdata});
+        interView.on("component:emaBox", (expr) => this.EMAComponent.trigger("component:emaBox", expr));
+        interView.on('selectElement', (id) => {this.selectedElements.push(id)});
+        interView.on('deselectElement', (id) => {
+          let index = this.selectedElements.indexOf(id)
+          if (index > -1) {
+              this.selectedElements.splice(index, 1);
+          }
+        });
 
         // Determine if notation must be highlighted
         let api_opts = textData["url"].split("/").pop();
@@ -132,12 +128,15 @@ class Continuo extends Backbone.View {
         }
 
         // Create EMA floating box
-        container.append(new EMAExprComponent().render());
+        this.EMAComponent = new EMAExprComponent()
+        container.append(this.EMAComponent.render());
 
         if (this.paginate && this.showPageCtrls) {
           // Create pagination floating box
           container.append(new Pagination().render());
         }
+
+        return this.$el
 
     }
 

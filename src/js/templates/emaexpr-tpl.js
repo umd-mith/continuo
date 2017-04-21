@@ -2,8 +2,8 @@ import * as Handlebars from 'handlebars';
 
 let emabox_tpl = `
 <div class="cnt-emaexpr">
-	<a href="#" id="cnt-emabox-cp" title="copy">⎘</a>
-	<div id="cnt-emaexpr-expr">{{expr}}</div>
+	<a href="#" class="cnt-emabox-cp" title="copy">⎘</a>
+	<div class="cnt-emaexpr-expr">{{expr}}</div>
 </div>
 `
 
