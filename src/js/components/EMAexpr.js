@@ -11,7 +11,8 @@ class EMAExprComponent extends Backbone.View {
 
     get events() {
         return {
-            "click .cnt-emabox-cp": this.copyExpr
+            "click .cnt-emabox-cp": this.copyExpr,
+            "click .cnt-emabox-hide": this.toggle
         }
     }
 
@@ -29,6 +30,16 @@ class EMAExprComponent extends Backbone.View {
         e.preventDefault();
         let url = "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr;
         window.prompt ("Copy to clipboard: Ctrl+C, Enter", url);
+    }
+
+    toggle(e) {
+      e.preventDefault();
+      if (this.$el.hasClass("cnt-hidden")){
+        this.$el.removeClass("cnt-hidden")
+      }
+      else {
+        this.$el.addClass("cnt-hidden")
+      }
     }
 
     updateEmaBox(expr) {

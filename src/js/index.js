@@ -99,6 +99,15 @@ class Continuo extends Backbone.View {
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
 
+        // Create EMA floating box
+        this.EMAComponent = new EMAExprComponent()
+        container.append(this.EMAComponent.render());
+
+        if (this.paginate && this.showPageCtrls) {
+          // Create pagination floating box
+          container.append(new Pagination().render());
+        }
+
         if (this.meiString) {
           this.addFile( {
               "filename": "",
@@ -125,15 +134,6 @@ class Continuo extends Backbone.View {
                     });
                 }
             });
-        }
-
-        // Create EMA floating box
-        this.EMAComponent = new EMAExprComponent()
-        container.append(this.EMAComponent.render());
-
-        if (this.paginate && this.showPageCtrls) {
-          // Create pagination floating box
-          container.append(new Pagination().render());
         }
 
         return this.$el

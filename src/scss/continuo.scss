@@ -59,6 +59,10 @@ $highlight_color: #ff9900;
       }
     }
 
+    .cnt-emabox.cnt-hidden .cnt-emaexpr-expr {
+        display: none;
+    }
+
     .cnt-emabox {
         display: none;
         border-radius: .5em;
@@ -71,16 +75,30 @@ $highlight_color: #ff9900;
                 line-height: 2em;
                 color: #fff;
                 font-size: 30px;
+                padding: 0 5px 0 5px;
             }
 
-            .cnt-emabox-cp {
+            .cnt-emabox-cp, .cnt-emabox-hide {
               position: absolute;
               left: -20px;
-              top: 2px;
               font-size: 17px;
               background-color: #e0e0e0;
               border-radius: 20px;
               padding: 2px 8px 2px 8px;
+
+              svg {
+                width: 10px;
+                height: 10px;
+              }
+
+            }
+
+            .cnt-emabox-cp {
+              top: 2px;
+            }
+
+            .cnt-emabox-hide {
+              top: 30px;
             }
 
             a:link, a:hover, a:visited, a:active {
