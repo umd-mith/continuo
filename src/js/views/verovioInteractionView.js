@@ -87,6 +87,11 @@ class VerovioInteractionView extends Backbone.View {
         }
     }
 
+    clearMusEvents(){
+      this.measures.reset()
+      this.trigger('component:emaBox', "")
+    }
+
     removeMusEvent($mei_el){
         $mei_el = $mei_el.parent();
         var ev_id = $mei_el.attr("id");

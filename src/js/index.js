@@ -30,6 +30,7 @@ class Continuo extends Backbone.View {
         this.listenTo(Events, 'addFile', this.addFile);
         this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
         this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
+        this.listenTo(Events, 'component:emaBox:clear', this.clearSelection);
     }
 
     addFile(textData) {
@@ -77,14 +78,15 @@ class Continuo extends Backbone.View {
               container.append(ext_svg);
           }
         }
-        let interView = new VerovioInteractionView({"el": container, "model": this.MEIdata});
-        interView.on("component:emaBox", (expr) => this.EMAComponent.trigger("component:emaBox", expr));
-        interView.on('selectElement', (id) => {this.selectedElements.push(id)});
-        interView.on('deselectElement', (id) => {
+        this.interView = new VerovioInteractionView({"el": container, "model": this.MEIdata});
+        this.interView.on("component:emaBox", (expr) => this.EMAComponent.trigger("component:emaBox", expr));
+        this.interView.on('selectElement', (id) => {this.selectedElements.push(id); this.trigger("selected", id)});
+        this.interView.on('deselectElement', (id) => {
           let index = this.selectedElements.indexOf(id)
           if (index > -1) {
               this.selectedElements.splice(index, 1);
           }
+          this.trigger("deselected", id)
         });
 
         // Determine if notation must be highlighted
@@ -93,6 +95,21 @@ class Continuo extends Backbone.View {
             new HighlightView({"el": container, "model": this.MEIdata});
         }
 
+    }
+
+    clearSelection() {
+        for (let sel of this.selectedElements) {
+          let $sel = this.$el.find("#"+sel)
+          let class_att = $sel.attr("class")
+          if (class_att) {
+            let classes = class_att.split(" ")
+            classes.splice(classes.indexOf(".cnt-selected"), 1)
+            $sel.attr("class", classes.join(" "))
+          }
+        }
+        this.interView.clearMusEvents()
+        this.selectedElements = []
+        this.trigger("clearedSelection")
     }
 
     render(){

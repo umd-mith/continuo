@@ -78,7 +78,7 @@ $highlight_color: #ff9900;
                 padding: 0 5px 0 5px;
             }
 
-            .cnt-emabox-cp, .cnt-emabox-hide {
+            .cnt-emabox-cp, .cnt-emabox-hide, .cnt-emabox-x {
               position: absolute;
               left: -20px;
               font-size: 17px;
@@ -93,12 +93,16 @@ $highlight_color: #ff9900;
 
             }
 
-            .cnt-emabox-cp {
-              top: 2px;
+            .cnt-emabox-x {
+              top: -5px;
             }
 
             .cnt-emabox-hide {
-              top: 30px;
+              top: 24px;
+            }
+
+            .cnt-emabox-cp {
+              top: 52px;
             }
 
             a:link, a:hover, a:visited, a:active {

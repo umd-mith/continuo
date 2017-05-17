@@ -11,6 +11,7 @@ class EMAExprComponent extends Backbone.View {
 
     get events() {
         return {
+            "click .cnt-emabox-x": () => {Events.trigger("component:emaBox:clear")},
             "click .cnt-emabox-cp": this.copyExpr,
             "click .cnt-emabox-hide": this.toggle
         }
@@ -43,21 +44,19 @@ class EMAExprComponent extends Backbone.View {
     }
 
     updateEmaBox(expr) {
+        this.$el.show();
+        this.expr = expr;
+        // let server = "http://localhost:5000";
+        let server = "http://mith.umd.edu/ema";
+        let loc = window.location.origin+window.location.pathname;
+        let tpl_data = {
+            "expr" : expr,
+            "url" : loc + "#" + server + "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr + "/highlight"
+        }
+        this.$el.html(this.template(tpl_data));
+        this.delegateEvents(this.events);
         if (expr == "") {
             this.$el.hide();
-        }
-        else {
-            this.$el.show();
-            this.expr = expr;
-            // let server = "http://localhost:5000";
-            let server = "http://mith.umd.edu/ema";
-            let loc = window.location.origin+window.location.pathname;
-            let tpl_data = {
-                "expr" : expr,
-                "url" : loc + "#" + server + "/" + encodeURIComponent(this.MEIurl) + "/" + this.expr + "/highlight"
-            }
-            this.$el.html(this.template(tpl_data));
-            this.delegateEvents(this.events);
         }
     }
 
