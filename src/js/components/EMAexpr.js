@@ -11,7 +11,7 @@ class EMAExprComponent extends Backbone.View {
 
     get events() {
         return {
-            "click .cnt-emabox-x": () => {Events.trigger("component:emaBox:clear")},
+            "click .cnt-emabox-x": () => {this.trigger("component:emaBox:clear")},
             "click .cnt-emabox-cp": this.copyExpr,
             "click .cnt-emabox-hide": this.toggle
         }

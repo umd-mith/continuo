@@ -30,7 +30,6 @@ class Continuo extends Backbone.View {
         this.listenTo(Events, 'addFile', this.addFile);
         this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
         this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
-        this.listenTo(Events, 'component:emaBox:clear', this.clearSelection);
     }
 
     addFile(textData) {
@@ -119,6 +118,8 @@ class Continuo extends Backbone.View {
         // Create EMA floating box
         this.EMAComponent = new EMAExprComponent()
         container.append(this.EMAComponent.render());
+
+        this.listenTo(this.EMAComponent, 'component:emaBox:clear', this.clearSelection);
 
         if (this.paginate && this.showPageCtrls) {
           // Create pagination floating box
