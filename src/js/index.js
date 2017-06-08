@@ -111,6 +111,12 @@ class Continuo extends Backbone.View {
         this.trigger("clearedSelection")
     }
 
+    highlight(ids){
+      for (let id of ids){
+        this.$el.find("svg #"+id).addClass("cnt-highlighted")
+      }
+    }
+
     render(){
         let container = $("<div class='cnt-container'></div>");
         this.$el.append(container);
