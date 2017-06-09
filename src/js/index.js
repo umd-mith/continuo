@@ -7,6 +7,7 @@ import Events from './utils/backbone-events';
 import extend_vrv from './utils/verovio-ext';
 import EMAExprComponent from './components/EMAexpr';
 import Pagination from './components/pagination';
+import ns from './utils/namespace';
 import 'xmldom';
 
 // NOTES
@@ -27,6 +28,7 @@ class Continuo extends Backbone.View {
           : options.showPageCtrls
         this.page = 1;
         this.selectedElements = [];
+        this.highlightedElements = [];
         this.listenTo(Events, 'addFile', this.addFile);
         this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
         this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
@@ -112,9 +114,13 @@ class Continuo extends Backbone.View {
     }
 
     highlight(ids){
-      for (let id of ids){
-        this.$el.find("svg #"+id).addClass("cnt-highlighted")
-      }
+      this.highlightedElements = ids
+      this.renderPage(this.page)
+    }
+
+    clearHighlight(){
+      this.highlightedElements = []
+      this.renderPage(this.page)
     }
 
     render(){
@@ -167,16 +173,21 @@ class Continuo extends Backbone.View {
     renderPage (page) {
       if (page > 0 && page <= this.vrvToolkit.getPageCount()) {
         this.page = page;
-        let container = this.$el.find(".cnt-container");
         let svg = this.vrvToolkit.renderPage(page);
         let ext_svg = extend_vrv(svg);
-        container.find('svg').replaceWith(ext_svg);
+        this.$el.find(".cnt-container > svg").replaceWith(ext_svg);
 
         // Highlight ids
         for (let id of this.selectedElements) {
-          let $mei_el = $("#"+id)
+          let $mei_el = this.$el.find("#"+id)
           if (!$mei_el.hasClass("cnt-selected")) {
             $mei_el.addClass("cnt-selected");
+          }
+        }
+        for (let id of this.highlightedElements) {
+          let $mei_el = this.$el.find("#"+id)
+          if (!$mei_el.hasClass("cnt-highlighted")) {
+            $mei_el.addClass("cnt-highlighted");
           }
         }
       }
