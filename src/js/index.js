@@ -8,10 +8,6 @@ import extend_vrv from './utils/verovio-ext';
 import EMAExprComponent from './components/EMAexpr';
 import Pagination from './components/pagination';
 import ns from './utils/namespace';
-import 'xmldom';
-
-// NOTES
-// jQuery is only used for HTML DOM operations. All XML DOM operations require xmldom.
 
 class Continuo extends Backbone.View {
 
@@ -30,6 +26,7 @@ class Continuo extends Backbone.View {
         this.selectedElements = [];
         this.highlightedElements = [];
         this.listenTo(Events, 'addFile', this.addFile);
+        this.listenTo(Events, 'selectMusEventById', this.selectMusEventById);
         this.listenTo(Events, 'component:pagination:next', () => {this.renderPage(this.page+1)});
         this.listenTo(Events, 'component:pagination:prev', () => {this.renderPage(this.page-1)});
     }
@@ -111,6 +108,13 @@ class Continuo extends Backbone.View {
         this.interView.clearMusEvents()
         this.selectedElements = []
         this.trigger("clearedSelection")
+    }
+
+    selectMusEventById(ev_id) {
+      var $mei_el = this.$el.find('#' + ev_id)
+      if (!$mei_el.hasClass("cnt-selected")) {
+        $mei_el.addClass("cnt-selected")
+      }
     }
 
     highlight(ids){

@@ -32,59 +32,66 @@ class VerovioInteractionView extends Backbone.View {
         this.dragging = false;
     }
 
-    addMusEvent($mei_el) {
-        $mei_el = $mei_el.parent();
+    addMusEvent($svg_el) {
+        var $mei_el = $svg_el.parent();
         var ev_id = $mei_el.attr("id");
-        this.trigger("selectElement", ev_id)
+        this.addMusEventFromId(ev_id)
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
-
         if (!$mei_el.hasClass("cnt-selected")) {
             $mei_el.addClass("cnt-selected");
-
-            let XPmeasure = XPevent.xpath("ancestor::mei:measure[1]", ns);
-            let measure_id = XPmeasure.xpath('@xml:id').val();
-
-            let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
-            let staff_id = XPstaff.xpath('@xml:id').val();
-            let measure_idx = XPmeasure.xpath("preceding::mei:measure[ancestor::mei:music]", ns).length + 1;
-
-            var measure = this.measures.get(measure_id);
-            if (!measure) {
-                measure = this.measures.add({
-                    "measure" : XPmeasure,
-                    "id" : measure_id,
-                    "index" : measure_idx
-                });
-            }
-
-            let staves = measure.get("staves");
-            var staff = staves.get(staff_id);
-            var staff_idx = XPstaff.xpath("preceding-sibling::mei:staff", ns).length + 1;
-
-            if (!staff) {
-                staff = staves.add({
-                    "staff": XPstaff,
-                    "id" : staff_id,
-                    "index" : staff_idx
-                });
-            }
-
-            let beats = staff.get("beats");
-            let beat = XPevent.getEventBeat();
-            let storedBeat = beats.filter(function (b) { return b.get("value") === beat; });
-            if (storedBeat.length == 0){
-                beats.add({
-                    "event" : XPevent.xpath('@xml:id').val(),
-                    "value" : beat
-                });
-            }
-
-            let emaExpr = this.measures.generateOptimizedEMAExpr();
-            this.trigger('component:emaBox', emaExpr);
+            this.addMEIEvent(XPevent)
         }
-        else {
-            //noop
+    }
+
+    addMusEventFromId(ev_id) {
+        this.trigger("selectElement", ev_id)
+        var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
+        // highlight it if it can be found.
+        Events.trigger('selectMusEventById', ev_id)
+        this.addMEIEvent(XPevent) 
+    }
+
+    addMEIEvent(XPevent) {
+        let XPmeasure = XPevent.xpath("ancestor::mei:measure[1]", ns);
+        let measure_id = XPmeasure.xpath('@xml:id').val();
+
+        let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
+        let staff_id = XPstaff.xpath('@xml:id').val();
+        let measure_idx = XPmeasure.xpath("preceding::mei:measure[ancestor::mei:music]", ns).length + 1;
+
+        var measure = this.measures.get(measure_id);
+        if (!measure) {
+            measure = this.measures.add({
+                "measure" : XPmeasure,
+                "id" : measure_id,
+                "index" : measure_idx
+            });
         }
+
+        let staves = measure.get("staves");
+        var staff = staves.get(staff_id);
+        var staff_idx = XPstaff.xpath("preceding-sibling::mei:staff", ns).length + 1;
+
+        if (!staff) {
+            staff = staves.add({
+                "staff": XPstaff,
+                "id" : staff_id,
+                "index" : staff_idx
+            });
+        }
+
+        let beats = staff.get("beats");
+        let beat = XPevent.getEventBeat();
+        let storedBeat = beats.filter(function (b) { return b.get("value") === beat; });
+        if (storedBeat.length == 0){
+            beats.add({
+                "event" : XPevent.xpath('@xml:id').val(),
+                "value" : beat
+            });
+        }
+
+        let emaExpr = this.measures.generateOptimizedEMAExpr();
+        this.trigger('component:emaBox', emaExpr);
     }
 
     clearMusEvents(){
