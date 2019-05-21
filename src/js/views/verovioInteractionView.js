@@ -47,7 +47,10 @@ class VerovioInteractionView extends Backbone.View {
         this.trigger("selectElement", ev_id)
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
         // highlight it if it can be found.
-        Events.trigger('selectMusEventById', ev_id)
+        var $mei_el = this.$el.find('#' + ev_id)
+        if (!$mei_el.hasClass("cnt-selected")) {
+            $mei_el.addClass("cnt-selected")
+        }
         this.addMEIEvent(XPevent) 
     }
 
