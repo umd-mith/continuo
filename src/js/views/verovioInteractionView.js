@@ -48,8 +48,10 @@ class VerovioInteractionView extends Backbone.View {
         var XPevent = this.$MEIdata.xpath("//*[@xml:id='"+ev_id+"']");
         // highlight it if it can be found.
         var $mei_el = this.$el.find('#' + ev_id)
-        if (!$mei_el.hasClass("cnt-selected")) {
-            $mei_el.addClass("cnt-selected")
+        if ($mei_el.length > 0) {
+            if (!$mei_el.hasClass("cnt-selected")) {
+                $mei_el.addClass("cnt-selected")
+            }
         }
         this.addMEIEvent(XPevent) 
     }
@@ -59,6 +61,8 @@ class VerovioInteractionView extends Backbone.View {
         let measure_id = XPmeasure.xpath('@xml:id').val();
 
         let XPstaff = XPevent.xpath("ancestor::mei:staff[1]", ns);
+        // Make sure this is an event on staff, ie we can calculate its beat later.
+        if (Object.keys(XPstaff).length === 0) return null
         let staff_id = XPstaff.xpath('@xml:id').val();
         let measure_idx = XPmeasure.xpath("preceding::mei:measure[ancestor::mei:music]", ns).length + 1;
 
