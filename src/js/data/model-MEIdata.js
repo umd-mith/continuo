@@ -1,4 +1,4 @@
-var $ = global.jQuery = require('jquery');
+var $ = require('jquery');
 require('../../../lib/jquery-xpath/jquery.xpath');
 
 import * as Backbone from 'backbone';

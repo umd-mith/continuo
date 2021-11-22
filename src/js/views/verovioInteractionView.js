@@ -1,4 +1,4 @@
-var $ = global.jQuery = require('jquery');
+var $ = require('jquery');
 require('../../../lib/jquery-xpath/jquery.xpath');
 
 import * as Backbone from 'backbone';
@@ -53,7 +53,7 @@ class VerovioInteractionView extends Backbone.View {
                 $mei_el.addClass("cnt-selected")
             }
         }
-        this.addMEIEvent(XPevent) 
+        this.addMEIEvent(XPevent)
     }
 
     addMEIEvent(XPevent) {
