@@ -1,4 +1,4 @@
-var $ = global.jQuery = require('jquery');
+var $ = require('jquery');
 
 import * as Backbone from 'backbone';
 import ns from '../utils/namespace';
