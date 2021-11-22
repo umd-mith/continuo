@@ -1,6 +1,6 @@
 {
   "name": "@squarebit/continuo",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Select notes on a rendered MEI music score and create permalinks using the Music Addressability URL scheme.",
   "main": "./lib/js/index.js",
   "scripts": {
@@ -37,10 +37,10 @@
     "vinyl-source-stream": "2.0.0"
   },
   "dependencies": {
+    "@xmldom/xmldom": "^0.7.5",
     "backbone": "1.4.0",
     "handlebars": "4.7.7",
-    "jquery": "^3.6.0",
-    "xmldom": "0.6.0"
+    "jquery": "^3.6.0"
   },
   "repository": {
     "type": "git",
