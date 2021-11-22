@@ -1,6 +1,6 @@
 {
   "name": "@squarebit/continuo",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Select notes on a rendered MEI music score and create permalinks using the Music Addressability URL scheme.",
   "main": "./lib/js/index.js",
   "scripts": {
