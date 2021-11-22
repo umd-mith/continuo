@@ -3,3 +3,4 @@ lib/verovio
 dist
 node_modules
 npm-debug.log
+.idea/

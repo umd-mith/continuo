@@ -4,9 +4,9 @@
   "description": "Select notes on a rendered MEI music score and create permalinks using the Music Addressability URL scheme.",
   "main": "./lib/js/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "babel src --out-dir lib && gulp default",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
   },
   "keywords": [
     "Music notation",
@@ -43,7 +43,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/umd-mith/continuo"
+    "url": "https://github.com/square-bit/continuo"
   },
   "babel": {
     "presets": [
