@@ -44,11 +44,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/square-bit/continuo"
+    "url": "git+https://github.com/square-bit/continuo.git"
   },
   "babel": {
     "presets": [
       "@babel/preset-env"
     ]
+  },
+  "bugs": {
+    "url": "https://github.com/square-bit/continuo/issues"
+  },
+  "homepage": "https://github.com/square-bit/continuo#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
   }
 }
