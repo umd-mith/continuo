@@ -15,9 +15,10 @@ meiprocessing.getClosestMeter = function() {
     if (!count || !unit) {
         let count_elm = XPscoreDef.xpath("descendant::mei:meterSig", ns);
         if (count_elm.length > 0){
-            if (count_elm.length > 1) {
-                throw "Mixed meter is not supported";
-            }
+            // Remove throw error.
+            // if (count_elm.length > 1) {
+            //    throw "Mixed meter is not supported";
+            // }
             let count = count_elm[0].xpath("@count").val();
             let unit = count_elm[0].xpath("@unit").val();
             if (!count || !unit){
