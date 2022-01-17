@@ -19,8 +19,8 @@ meiprocessing.getClosestMeter = function() {
             // if (count_elm.length > 1) {
             //    throw "Mixed meter is not supported";
             // }
-            let count = count_elm[0].xpath("@count").val();
-            let unit = count_elm[0].xpath("@unit").val();
+            let count = $(count_elm[0]).xpath("@count").val();
+            let unit = $(count_elm[0]).xpath("@unit").val();
             if (!count || !unit){
                 throw "Could not locate meter and compute beats";
             }
