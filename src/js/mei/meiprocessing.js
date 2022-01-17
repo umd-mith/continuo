@@ -24,6 +24,7 @@ meiprocessing.getClosestMeter = function() {
             if (!count || !unit){
                 throw "Could not locate meter and compute beats";
             }
+            return {"count" : count, "unit" : unit}
         }
         // No meter specified, lookback
         else {
