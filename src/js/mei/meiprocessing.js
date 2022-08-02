@@ -12,6 +12,7 @@ meiprocessing.getClosestMeter = function() {
     // Process for beat data if the scoreDef defines meter, otherwise lookback
     let count = XPscoreDef.attr("meter.count");
     let unit = XPscoreDef.attr("meter.unit");
+    let realUnit = XPscoreDef.attr("meter.real_unit") || unit;
     if (!count || !unit) {
         let count_elm = XPscoreDef.xpath("descendant::mei:meterSig", ns);
         if (count_elm.length > 0){
@@ -21,17 +22,18 @@ meiprocessing.getClosestMeter = function() {
             // }
             let count = $(count_elm[0]).xpath("@count").val();
             let unit = $(count_elm[0]).xpath("@unit").val();
+            let realUnit = $(count_elm[0]).xpath("@real_unit").val() || unit;
             if (!count || !unit){
                 throw "Could not locate meter and compute beats";
             }
-            return {"count" : count, "unit" : unit}
+            return {"count" : count, "unit" : unit, "real_unit": realUnit}
         }
         // No meter specified, lookback
         else {
             return meiprocessing.getClosestMeter.apply(XPscoreDef);
         }
     }
-    return {"count" : count, "unit" : unit}
+    return {"count" : count, "unit" : unit, "real_unit": realUnit}
 }
 
 meiprocessing.getDurationToMeter = function() {
@@ -62,12 +64,12 @@ meiprocessing.getDurationToMeter = function() {
 
         // Calculate duration relative to meter
         let meter = meiprocessing.getClosestMeter.apply(this);
-        var relative_dur = meter.unit / dur;
+        var relative_dur = meter.real_unit / dur;
 
         var dot_dur = dur;
         for (let d of Array.from(new Array(dots), (x,i) => i)) {
             dot_dur = dot_dur * 2;
-            relative_dur += meter.unit / dot_dur;
+            relative_dur += meter.real_unit / dot_dur;
         }
 
         // Adjust duration if this event is contained in a tuplet
