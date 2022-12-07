@@ -1,6 +1,4 @@
-import $ from 'jquery';
 import * as Backbone from 'backbone';
-import Events from '../utils/backbone-events';
 import emaexpr_tpl from '../templates/emaexpr-tpl';
 
 class EMAExprComponent extends Backbone.View {
@@ -11,7 +9,7 @@ class EMAExprComponent extends Backbone.View {
 
     get events() {
         return {
-            "click .cnt-emabox-x": () => {this.trigger("component:emaBox:clear")},
+            "click .cnt-emabox-x": (e) => {e.preventDefault(); this.trigger("component:emaBox:clear")},
             "click .cnt-emabox-cp": this.copyExpr,
             "click .cnt-emabox-hide": this.toggle
         }

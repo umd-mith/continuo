@@ -2,13 +2,12 @@
 const gulp  = require('gulp'),
     gutil = require('gulp-util'),
     connect = require('gulp-connect'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
-    babelify = require('babelify')
-    sass = require('gulp-sass') ,
+    babelify = require('babelify'),
     autoprefixer = require('gulp-autoprefixer'),
     nano = require('gulp-cssnano'),
     sourcemaps = require('gulp-sourcemaps')
@@ -33,27 +32,12 @@ gulp.task('build:es6', function() {
 });
 
 gulp.task('build:css', function() {
-  return gulp.src('src/scss/**/*.scss')
-    .pipe(sass().on('error', function(err) {
-      gutil.log('Error: ' + err.message);
-      this.emit('end');
-    }))
-    .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
-      cascade: false
-    }))
-    .pipe(sourcemaps.init())
-    .pipe(nano())
-    .pipe(sourcemaps.write('.'))
-    .on('error', function(err) {
-      gutil.log("Error : " + err.message);
-      this.emit('end');
-    })
-    .pipe(gulp.dest('dist/css/'));
+  return gulp.src('./src/css/*.css')
+    .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('watch', function() {
-    gulp.watch('src/scss/**/*.scss', ['build:css']);
+    gulp.watch('src/css/**/*.css', ['build:css']);
     gulp.watch('src/js/**/*.js', ['build:es6']);
 })
 

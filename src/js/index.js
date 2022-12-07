@@ -62,7 +62,7 @@ class Continuo extends Backbone.View {
 
         if (this.paginate) {
           this.page = 1;
-          let svg = vrvToolkit.renderPage(1);
+          let svg = vrvToolkit.renderToSVG(1);
           let ext_svg = extend_vrv(svg);
           container.append(ext_svg);
         }
@@ -107,6 +107,10 @@ class Continuo extends Backbone.View {
         this.interView.clearMusEvents()
         this.selectedElements = []
         this.trigger("clearedSelection")
+    }
+
+    addMusEventFromId(id) {
+      this.interView.addMusEventFromId(id)
     }
 
     highlight(ids){
@@ -169,7 +173,7 @@ class Continuo extends Backbone.View {
     renderPage (page) {
       if (page > 0 && page <= this.vrvToolkit.getPageCount()) {
         this.page = page;
-        let svg = this.vrvToolkit.renderPage(page);
+        let svg = this.vrvToolkit.renderToSVG(page);
         let ext_svg = extend_vrv(svg);
         this.$el.find(".cnt-container > svg").replaceWith(ext_svg);
 
