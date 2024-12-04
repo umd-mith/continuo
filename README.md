@@ -25,6 +25,19 @@ $ gulp
 (new Continuo({el: "#html_id", meiString: '<mei><!-- MEI data --></mei>'})).render();
 ```
 
+## Options
+
+The object passed to the constructor allows various options: 
+
+* **el**: ID of the HTML element where the score shall be rendered; prepended by '#'
+* **mei**: URL of the MEI file to be loaded
+* **meiString**: The content of the MEI file as string
+* **verovioToolkit**: A reference to the Verovio toolkit. In Verovio's tutorials, this is usually the variable *vrvToolkit*
+* **verovioOptions**: Custom options for Verovio.
+* **omas**: *undocumented*
+* **paginate**: *undocumented*
+* **showPageCtrls**: Decides whether page controls shall be rendered. *boolean*, default: *true*
+
 ## Based on
 * [Music Encoding Initiative](http://music-encoding.org)
 * [Verovio](http://www.verovio.org/)
